@@ -28,10 +28,6 @@ share/python-wheels/
 *.egg
 MANIFEST
 
-# ChromaDB
-chroma_db/
-*.sqlite3
-
 # Virtual Environment
 venv/
 env/
@@ -85,3 +81,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+
+# FAISS index files (in-memory, but just in case)
+*.faiss
+*.pkl
