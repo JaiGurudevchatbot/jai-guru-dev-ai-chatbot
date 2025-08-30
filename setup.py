@@ -2,6 +2,7 @@
 """
 Enhanced setup script for JAI GURU DEV AI Chatbot
 Handles dependency conflicts and provides multiple installation options.
+Now optimized for Railway free tier with in-memory vector database.
 """
 
 import os
@@ -24,16 +25,7 @@ def install_requirements_with_fallback():
     except subprocess.CalledProcessError as e:
         print(f"⚠️ Method 1 failed: {e}")
     
-    # Try method 2: Install with simple requirements (let pip resolve)
-    try:
-        print("📦 Attempting installation with flexible versions...")
-        subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", "requirements_simple.txt"])
-        print("✅ Requirements installed successfully with flexible versions!")
-        return True
-    except subprocess.CalledProcessError as e:
-        print(f"⚠️ Method 2 failed: {e}")
-    
-    # Try method 3: Install packages individually
+    # Try method 2: Install packages individually
     try:
         print("📦 Installing packages individually...")
         essential_packages = [
@@ -41,7 +33,7 @@ def install_requirements_with_fallback():
             "langchain", 
             "langchain-openai",
             "langchain-community",
-            "chromadb",
+            "faiss-cpu",
             "python-dotenv",
             "pyyaml",
             "openai>=1.10.0",
@@ -82,7 +74,7 @@ def verify_installation():
         'streamlit',
         'langchain', 
         'openai',
-        'chromadb',
+        'faiss',  # Changed from chromadb to faiss
         'yaml',
         'pandas',
         'numpy'
@@ -93,6 +85,8 @@ def verify_installation():
         try:
             if package == 'yaml':
                 import yaml
+            elif package == 'faiss':
+                import faiss
             else:
                 __import__(package)
             print(f"✅ {package} - OK")
@@ -198,9 +192,39 @@ def test_config():
         print(f"❌ Error parsing config.yaml: {e}")
         return False
 
+def test_vector_database():
+    """Test in-memory vector database creation"""
+    print("🧠 Testing in-memory vector database...")
+    
+    try:
+        import faiss
+        import numpy as np
+        
+        # Create a simple test vector database
+        dimension = 10
+        test_vectors = np.random.random((5, dimension)).astype('float32')
+        
+        # Create FAISS index
+        index = faiss.IndexFlatL2(dimension)
+        index.add(test_vectors)
+        
+        # Test search
+        query_vector = np.random.random((1, dimension)).astype('float32')
+        distances, indices = index.search(query_vector, 2)
+        
+        print(f"✅ In-memory vector database test successful!")
+        print(f"   Created index with {index.ntotal} vectors")
+        return True
+        
+    except Exception as e:
+        print(f"❌ Vector database test failed: {e}")
+        return False
+
 def main():
     """Main setup function"""
-    print("🙏 JAI GURU DEV AI Chatbot - Enhanced Setup Script")
+    print("🙏 JAI GURU DEV AI Chatbot - Railway-Optimized Setup")
+    print("=" * 60)
+    print("🧠 Now using in-memory vector database for Railway free tier!")
     print("=" * 60)
     
     # Check Python version
@@ -214,7 +238,7 @@ def main():
     print(f"\n📦 Step 1: Installing Dependencies")
     if not install_requirements_with_fallback():
         print("❌ Failed to install core dependencies")
-        print("💡 Try running manually: pip install streamlit langchain langchain-openai chromadb python-dotenv pyyaml openai")
+        print("💡 Try running manually: pip install streamlit langchain langchain-openai faiss-cpu python-dotenv pyyaml openai")
         return False
     
     # Install Groq separately
@@ -224,6 +248,7 @@ def main():
     # Verification steps
     verification_steps = [
         ("Verify Installation", verify_installation),
+        ("Test Vector Database", test_vector_database),
         ("Verify Environment", verify_environment),
         ("Verify Knowledge Base", verify_knowledge_base),
         ("Test Configuration", test_config),
@@ -242,11 +267,17 @@ def main():
     print("\n" + "=" * 60)
     if all_passed:
         print("🎉 Setup completed successfully!")
-        print("\n🚀 To start the chatbot, run:")
+        print("\n🚀 Ready for Railway deployment!")
+        print("\n🔥 Benefits of in-memory vector database:")
+        print("   • ✅ Works on Railway free tier")
+        print("   • ⚡ Faster startup after first load")  
+        print("   • 💾 No persistent storage needed")
+        print("   • 🔄 Fresh index on each deployment")
+        print("\n🚀 To start the chatbot locally:")
         print("   python start_chatbot.py")
         print("   OR")
         print("   streamlit run chatbot.py")
-        print("\n💡 Note: First run will take 1-2 minutes to build the vector database")
+        print("\n💡 Note: First run takes 30-60 seconds to build in-memory vector database")
     else:
         print("❌ Setup encountered some issues.")
         print("💡 The chatbot may still work if core dependencies are installed.")
