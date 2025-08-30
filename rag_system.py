@@ -2,9 +2,7 @@ import os
 import yaml
 from typing import List, Dict, Any, Tuple
 from dataclasses import dataclass
-import chromadb
-from chromadb.config import Settings
-from langchain_community.vectorstores import Chroma
+from langchain_community.vectorstores import FAISS
 from langchain_openai import OpenAIEmbeddings
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.schema import Document
@@ -79,7 +77,7 @@ class CustomRetriever(BaseRetriever):
             return self.vectorstore.similarity_search(query, k=self.top_k)
 
 class RAGSystem:
-    """RAG System for JAI GURU DEV AI Chatbot"""
+    """RAG System for JAI GURU DEV AI Chatbot - In-Memory Version"""
     
     def __init__(self, config_path: str, knowledge_base_path: str):
         self.config_path = config_path
@@ -139,7 +137,7 @@ class RAGSystem:
         )
     
     def load_and_process_documents(self):
-        """Load and process all teachings from markdown files"""
+        """Load and process all teachings from markdown files - In Memory Version"""
         processor = DocumentProcessor(self.knowledge_base_path)
         self.teachings = processor.load_all_teachings()
         
@@ -166,16 +164,16 @@ class RAGSystem:
             )
             documents.append(doc)
         
-        # Setup vector store
+        # Setup in-memory vector store using FAISS
         try:
-            self.vectorstore = Chroma.from_documents(
+            print("🧠 Creating in-memory vector database with FAISS...")
+            self.vectorstore = FAISS.from_documents(
                 documents=documents,
-                embedding=self.embeddings,
-                persist_directory="./chroma_db"
+                embedding=self.embeddings
             )
-            print(f"✅ Loaded {len(documents)} teachings into vector database")
+            print(f"✅ Loaded {len(documents)} teachings into in-memory vector database")
         except Exception as e:
-            print(f"❌ Error creating vector store: {e}")
+            print(f"❌ Error creating in-memory vector store: {e}")
             raise
     
     def setup_retrieval_chain(self):
@@ -370,8 +368,8 @@ def test_embeddings_connection():
 if __name__ == "__main__":
     # Test the RAG system
     rag = RAGSystem(
-        config_path="C:/01_Projects/Guruji_Chatbot/config.yaml",
-        knowledge_base_path="C:/01_Projects/Guruji_Chatbot/Knowledge_Base"
+        config_path="config.yaml",
+        knowledge_base_path="Knowledge_Base"
     )
     
     # Test query
