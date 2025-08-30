@@ -1,19 +1,27 @@
 # 🙏 JAI GURU DEV AI Chatbot
 
-A spiritual guidance chatbot powered by Sri Sri Ravi Shankar's teachings, built using RAG (Retrieval Augmented Generation) technology with Streamlit UI.
+A spiritual guidance chatbot powered by Sri Sri Ravi Shankar's teachings, built using RAG (Retrieval Augmented Generation) technology with Streamlit UI. **Now optimized for Railway free tier deployment!**
 
 ## ✨ Features
 
-- **Intelligent Retrieval**: Advanced RAG system that finds the most relevant teachings based on your questions and context
+- **Intelligent Retrieval**: Advanced RAG system with in-memory FAISS vector database
 - **Context-Aware**: Gathers user context (emotional state, life situation, guidance type) for personalized responses
 - **Multiple AI Models**: Configurable support for OpenAI GPT and Groq Llama models
 - **Beautiful UI**: Saffron-themed Streamlit interface inspired by spiritual aesthetics
 - **Comprehensive Knowledge Base**: Contains structured teachings with metadata (topics, keywords, emotional states, etc.)
 - **Source Attribution**: Shows which specific teachings were used to generate responses
+- **Railway Free Tier Compatible**: In-memory vector database that works on free hosting tiers
 
 ## 🚀 Quick Deploy to Railway
 
 [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/your-template-id)
+
+### ⚡ Railway Free Tier Benefits
+
+- **✅ No Persistent Storage**: In-memory vector database eliminates storage costs
+- **🚀 Fast Startup**: FAISS vector database loads quickly into memory
+- **💰 Cost-Effective**: Designed specifically for Railway's free tier
+- **🔄 Fresh Start**: Database rebuilds on each deployment with latest teachings
 
 ### Environment Variables for Railway:
 
@@ -27,20 +35,20 @@ ENVIRONMENT=production
 
 ```
 jai-guru-dev-ai-chatbot/
-├── .env.example           # Environment template
-├── .gitignore            # Git ignore rules  
+├── .env.example           # Environment variables template  
+├── .gitignore            # Git ignore rules
 ├── railway.toml          # Railway deployment config
 ├── config.yaml           # Application configuration
-├── requirements.txt      # Python dependencies
+├── requirements.txt      # Python dependencies (FAISS optimized)
 ├── setup.py             # Setup and testing script
 ├── chatbot.py           # Main Streamlit application
-├── rag_system.py        # RAG system with LangChain
+├── rag_system.py        # In-memory RAG system with FAISS
 ├── document_processor.py # Markdown file processor
 ├── start_chatbot.py     # Enhanced launcher script
 ├── test_system.py       # Component testing script
-└── Knowledge_Base/      # Teaching files (to be added)
-    ├── ssrs_teachings_batch1.md
-    └── ...
+└── Knowledge_Base/      # Teaching files directory
+    ├── README.md        # Format documentation
+    └── sample_teachings.md # Example teachings
 ```
 
 ## 🏗️ Local Development
@@ -83,7 +91,7 @@ jai-guru-dev-ai-chatbot/
 
 ### First Run
 
-1. The application will automatically initialize the vector database on first run
+1. The application will automatically build the in-memory vector database on startup (30-60 seconds)
 2. Select your preferred AI model provider (OpenAI or Groq) in the sidebar
 3. Answer the initial context questions to personalize your experience
 4. Start asking questions about life, spirituality, relationships, and more!
@@ -150,9 +158,9 @@ This rich metadata enables sophisticated retrieval based on:
 - User provides information about their situation, emotional state, and what type of guidance they seek
 - This context is stored and used to enhance all subsequent queries
 
-### 2. Intelligent Retrieval
+### 2. Intelligent Retrieval (In-Memory)
 - User's question is enhanced with their context
-- Vector similarity search finds relevant teachings
+- FAISS vector similarity search finds relevant teachings in memory
 - Metadata filtering ensures contextually appropriate results
 - Custom retriever combines multiple signals for optimal results
 
@@ -189,14 +197,14 @@ This rich metadata enables sophisticated retrieval based on:
 
 ### Performance Tips
 
-- First run takes longer as it builds the vector database
-- Subsequent runs are faster as the database is cached
+- First run takes 30-60 seconds to build in-memory vector database
+- Subsequent queries are very fast with FAISS in-memory search
 - Use Groq models for faster response times
 - Use OpenAI models for higher quality responses
 
 ## 🚀 Railway Deployment
 
-This application is optimized for Railway deployment:
+This application is optimized for Railway's free tier:
 
 1. **Fork this repository**
 2. **Connect to Railway**: 
@@ -209,6 +217,14 @@ This application is optimized for Railway deployment:
 4. **Deploy**: Railway will automatically deploy using `railway.toml`
 
 The application will be accessible at your Railway-provided URL.
+
+### 🧠 Why In-Memory Vector Database?
+
+- **Cost-Effective**: No persistent storage costs on Railway
+- **Fast Performance**: FAISS is extremely fast for similarity search
+- **Simple Deployment**: No database setup or configuration needed
+- **Fresh Updates**: Database rebuilds with each deployment
+- **Memory Efficient**: Optimized for small to medium knowledge bases
 
 ## 🤝 Usage Examples
 
@@ -255,7 +271,7 @@ python test_system.py
 
 1. Create new .md files in the `Knowledge_Base` folder
 2. Follow the exact metadata structure shown above
-3. Restart the application to reindex the new content
+3. Restart the application to reindex the new content (in-memory rebuild)
 
 ### Customizing
 
@@ -263,19 +279,40 @@ python test_system.py
 - **UI**: Modify `chatbot.py` for interface changes
 - **Configuration**: Update `config.yaml` for settings
 
-## 📜 License
+## 📊 System Requirements
 
-This project is created for educational and spiritual purposes. Please respect the teachings of Sri Sri Ravi Shankar and use this tool responsibly.
+- Python 3.8+
+- OpenAI API key (required)
+- Groq API key (optional)
+- 512MB+ RAM for in-memory vector database
+- Internet connection for AI APIs
 
-## 📞 Support
+## 🔒 Security & Privacy
 
-If you encounter issues:
-1. Run `python setup.py` for diagnostics
-2. Check the troubleshooting section above
-3. Create an issue on GitHub
+- Environment variables for API keys
+- No sensitive data in repository
+- In-memory vector database (no persistent storage)
+- Railway environment variable management
+
+## 📞 Support & Contributing
+
+- **Issues**: Create GitHub issues for bugs
+- **Documentation**: README.md and inline comments
+- **Testing**: Comprehensive test suite included
+- **Setup**: Automated dependency management
 
 ---
 
-**🙏 "Knowledge is structured in consciousness" - Sri Sri Ravi Shankar**
+**🙏 "In the depth of silence is the source of love" - Sri Sri Ravi Shankar**
 
-**Jai Guru Dev! 🙏**
+**Built with love and devotion • Optimized for Railway Free Tier • Jai Guru Dev! 🙏**
+
+---
+
+## 🏷️ Version Info
+
+- **Version**: Release 1.1 (Railway Optimized)
+- **Vector Database**: In-Memory FAISS (Railway Free Tier Compatible)
+- **Last Updated**: August 30, 2025
+- **Repository**: https://github.com/JaiGurudevchatbot/jai-guru-dev-ai-chatbot
+- **Deployment**: Railway-ready with automatic deployment on free tier
