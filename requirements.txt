@@ -3,7 +3,7 @@ langchain
 langchain-openai
 langchain-groq
 langchain-community
-chromadb
+faiss-cpu
 python-dotenv
 pyyaml
 tiktoken
